@@ -21,17 +21,17 @@ def generate_phrase(phrase_len, words, do_caps=True, do_punct=True):
     return str
 
 def score_input(phrase, inpt):
-    phrase = phrase.split()
-    splinput = inpt.split()
+    inptlen = len(inpt)
     correct_w = 0
+    phrase = phrase.split()
+    inpt = inpt.split()
     for i, word in enumerate(phrase):
         try:
-            if word == splinput[i]:
+            if word == inpt[i]:
                 correct_w += 1
         except:
             pass
-    return correct_w / len(phrase), len(inpt) / 5
-
+    return correct_w / len(phrase), inptlen / 5
                 
 if __name__ == '__main__':
     os.system('clear')
