@@ -11,7 +11,7 @@ def import_words():
 def generate_phrase(words, plen, diff, caps, punc):
     str = ' '.join([words[random.randint(0, diff)] for _ in range(plen)])
     if caps:
-        str = str.capitalize()
+        str = str[0].upper() + str[1:]
     if punc:
         str += '.'
     return str
