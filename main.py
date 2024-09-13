@@ -23,18 +23,19 @@ def score_input(phrase, inpt):
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
     words = import_words()
-    caps, punc = '-caps' in sys.argv, '-punc' in sys.argv
+    caps, punc, clear = '-caps' in sys.argv, '-punc' in sys.argv, '-clear' in sys.argv
     diff = re.search('-diff=[0-9]+', ' '.join(sys.argv))
     diff = min(int(diff.group().strip('-diff=')) if diff else 10, 10)
     plen = re.search('-len=[0-9]+', ' '.join(sys.argv))
     plen = min(int(plen.group().strip('-len=')) if plen else 15, 50)
     diff = max(int(diff / 10 * len(words) - 1), 1)
-    print(diff, plen)
     wpm_avg = 0
     accuracy_avg = 0
     ctr = 0
     while True:
         try:
+            if clear:
+                os.system('cls' if os.name == 'nt' else 'clear')
             phrase = generate_phrase(words, plen, diff, caps, punc)
             start_t = time.time()
             inpt = input('\n' + phrase + '\n').strip()
