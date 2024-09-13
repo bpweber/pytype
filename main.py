@@ -28,7 +28,7 @@ if __name__ == '__main__':
     diff = min(int(diff.group().strip('-diff=')) if diff else 10, 10)
     plen = re.search('-len=[0-9]+', ' '.join(sys.argv))
     plen = min(int(plen.group().strip('-len=')) if plen else 15, 50)
-    diff = max(int(diff / 100 * len(words) - 1), 1)
+    diff = max(int(diff / 10 * len(words) - 1), 1)
     print(diff, plen)
     wpm_avg = 0
     accuracy_avg = 0
