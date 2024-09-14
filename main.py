@@ -18,7 +18,7 @@ def generate_phrase(words, plen, diff, caps, punc):
 def score_input(phrase, inpt):
     inpt = ' '.join(inpt.split())
     correct_ch = sum(list(map(lambda x, y: sum(x == y for x, y in zip(x, y)), phrase.split(), inpt.split())))
-    return correct_ch / len(inpt.replace(' ', '')), len(inpt) / 5 
+    return correct_ch / max(len(inpt.replace(' ', '')), 1), len(inpt) / 5 
 
 def result_string(accuracy, wpm):
     return f'{round(100 * accuracy)}% | {round(accuracy * wpm)}wpm | {round(wpm)}raw'
