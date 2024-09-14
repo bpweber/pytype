@@ -1,3 +1,4 @@
+import datetime
 import random
 import time
 import sys
@@ -33,6 +34,7 @@ def parse_args(args):
 
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
+    session_start = datetime.datetime.now().strftime('%m-%d-%Y %H.%M.%S')
     words = import_words()
     caps, punc, clear, diff, plen = parse_args(sys.argv)
     wpm_avg = 0
@@ -57,8 +59,9 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             sys.stdout.write('\033[F\033[K')
             if clear: print('\n'.join(hist))
-            s = result_string(accuracy_avg, wpm_avg)
-            print('[Session Average]'.center(len(s)))
-            print(s)
+            s = result_string(accuracy_avg, wpm_avg) + '\n'
+            print('\n'.join(['[Session Average]'.center(len(s)), s]))
+            with open(f'{os.path.dirname(__file__)}/results/{session_start}.txt', 'w+') as f:
+                f.write('\n'.join(hist + ['[Session Average]'.center(len(s)), s]))
             exit()
 
