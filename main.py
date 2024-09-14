@@ -62,6 +62,6 @@ if __name__ == '__main__':
             s = result_string(accuracy_avg, wpm_avg) + '\n'
             print('\n'.join(['[Session Average]'.center(len(s)), s]))
             with open(f'{os.path.dirname(__file__)}/results/{session_start}.txt', 'w+') as f:
-                f.write('\n'.join(hist + ['[Session Average]'.center(len(s)), s]))
+                f.write('\n'.join(hist + ['[Session Average]'.center(len(s)), f'{s}\n']))
             exit()
 
