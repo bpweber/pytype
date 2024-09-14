@@ -15,21 +15,26 @@ def generate_phrase(words, plen, diff, caps, punc):
     return str
 
 def score_input(phrase, inpt):
+    inpt = ' '.join(inpt.split())
     correct_ch = sum(list(map(lambda x, y: sum(x == y for x, y in zip(x, y)), phrase.split(), inpt.split())))
-    return correct_ch / len(phrase.replace(' ', '')), len(inpt) / 5
+    return correct_ch / len(inpt.replace(' ', '')), len(inpt) / 5 
 
 def result_string(accuracy, wpm):
     return f'{round(100 * accuracy)}% | {round(accuracy * wpm)}wpm | {round(wpm)}raw'
 
+def parse_args(args):
+    caps, punc, clear = '-caps' in args, '-punc' in args, '-noclear' not in args
+    diff = re.search('-diff=[0-9]+', ' '.join(args))
+    diff = min(int(diff.group().strip('-diff=')) if diff else 10, 10)
+    diff = max(int(diff / 10 * len(words) - 1), 1)
+    plen = re.search('-len=[0-9]+', ' '.join(args))
+    plen = min(int(plen.group().strip('-len=')) if plen else 15, 50)
+    return caps, punc, clear, diff, plen
+
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
     words = import_words()
-    caps, punc, clear = '-caps' in sys.argv, '-punc' in sys.argv, '-noclear' not in sys.argv
-    diff = re.search('-diff=[0-9]+', ' '.join(sys.argv))
-    diff = min(int(diff.group().strip('-diff=')) if diff else 10, 10)
-    plen = re.search('-len=[0-9]+', ' '.join(sys.argv))
-    plen = min(int(plen.group().strip('-len=')) if plen else 15, 50)
-    diff = max(int(diff / 10 * len(words) - 1), 1)
+    caps, punc, clear, diff, plen = parse_args(sys.argv)
     wpm_avg = 0
     accuracy_avg = 0
     ctr = 0
