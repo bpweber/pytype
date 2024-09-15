@@ -12,7 +12,14 @@ def import_words():
 def generate_phrase(words, plen, diff, caps, punc):
     str = ' '.join([words[random.randint(0, diff)] for _ in range(plen)])
     if caps: str = str[0].upper() + str[1:]
-    if punc: str += '.'
+    if punc:
+        str += '.'
+        spc = 0
+        for i, char in enumerate(str):
+            if char == ' ':
+                spc += 1
+                if spc == int(plen / 2):
+                    str = str[:i] + ',' + str[i:]
     return str
 
 def score_input(phrase, inpt):
@@ -24,12 +31,18 @@ def result_string(accuracy, wpm):
     return f'{round(100 * accuracy)}% | {round(accuracy * wpm)}wpm | {round(wpm)}raw'
 
 def parse_args(args):
-    caps, punc, clear = '-caps' in args, '-punc' in args, '-noclear' not in args
-    diff = re.search('-diff=[0-9]+', ' '.join(args))
-    diff = min(int(diff.group().strip('-diff=')) if diff else 10, 10)
-    diff = max(int(diff / 10 * len(words) - 1), 1)
-    plen = re.search('-len=[0-9]+', ' '.join(args))
-    plen = min(int(plen.group().strip('-len=')) if plen else 15, 50)
+    caps, punc, clear, diff, plen = False, False, True, 10, 15
+    for arg in args[1:]:
+        if arg == '-caps': caps = True
+        elif arg == '-punc': punc = True
+        elif arg == '-noclear': clear = False
+        elif re.search('^-diff=([1-9]|10)$', arg):
+            diff = int(arg.strip('-diff='))
+        elif re.search('^-len=([1-9]|[1-4][0-9]|50)$', arg):
+            plen = int(arg.strip('-len='))
+        else:
+            raise ValueError('Illegal argument(s)!')
+    diff = diff / 10 * len(words) - 1
     return caps, punc, clear, diff, plen
 
 if __name__ == '__main__':
